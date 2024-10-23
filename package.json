@@ -1,0 +1,47 @@
+{
+  "private": true,
+  "name": "@loft/project",
+  "description": "The Loft Orbital front end coding challenge.",
+  "version": "0.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "node": ">=20.10.0 < 21"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "dependencies": {
+    "@apollo/client": "^3.11.8",
+    "@graphql-codegen/typescript": "^4.1.0",
+    "@graphql-codegen/typescript-operations": "^4.3.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
+    "graphql": "^16.9.0",
+    "graphql-tag": "^2.12.6",
+    "react-router-dom": "^6.27.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.3",
+    "@graphql-codegen/client-preset": "4.4.0",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@types/graphql": "^14.5.0",
+    "@vitest/coverage-v8": "2.0.4",
+    "concurrently": "8.2.2",
+    "turbo": "2.0.9",
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "start": "turbo run start",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "pnpm run test -c vitest.report.config.ts",
+    "codegen": "graphql-codegen --config codegen.ts"
+  }
+}

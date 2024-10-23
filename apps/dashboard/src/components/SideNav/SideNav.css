@@ -1,0 +1,53 @@
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.menu {
+  list-style: none;
+}
+.sidenav {
+  width: 200px;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.menu-item {
+  padding: 12px 0;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0073e6;
+}
+
+.sidenav-footer {
+  margin-top: auto;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.help-center,
+.notifications,
+.user-info {
+  padding: 10px 0;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.help-center:hover,
+.notifications:hover,
+.user-info:hover {
+  color: #0073e6;
+}

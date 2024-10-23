@@ -1,0 +1,39 @@
+query GetSatellites {
+  allSatellites {
+    id
+    name
+    status
+    description
+    Payloads {
+      id
+    }
+  }
+}
+
+query GetSatelliteDetails($id: ID!) {
+  allSatellites(filter: { id: $id }) {
+    id
+    name
+    status
+    image
+    description
+    busType
+    manufacturer
+    Payloads {
+      id
+      name
+      description
+      status
+      category
+      configuration
+    }
+    Launch {
+      id
+      date
+      status
+      outcome
+      provider
+      rocket
+    }
+  }
+}
