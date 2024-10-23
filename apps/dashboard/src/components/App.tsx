@@ -6,6 +6,7 @@ import { Reports } from "@/pages/Reports/Reports";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/ApolloClient";
 import { SatelliteDetails } from "@/pages/Home/SatelliteDetails";
+import { ReportDetails } from "@/pages/Reports/ReportDetails";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/satellite/:id" element={<SatelliteDetails />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/reports/:id" element={<ReportDetails />} />
             </Routes>
           </div>
         </div>

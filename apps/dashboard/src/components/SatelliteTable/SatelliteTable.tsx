@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import "./SatelliteTable.css";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ interface SatelliteTableProps {
 
 export const SatelliteTable = ({ data, handleSelect }: SatelliteTableProps) => {
   const headers = ["Satellite Name", "Status", "Description", "# of Payloads"];
+
   const navigate = useNavigate();
 
   return (

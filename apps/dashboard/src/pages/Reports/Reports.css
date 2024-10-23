@@ -1,0 +1,152 @@
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: gray;
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.report-card {
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  min-height: 200px;
+  overflow: hidden;
+  width: auto;
+  gap: 4px;
+  display: grid;
+  cursor: pointer;
+}
+
+.status-badge.maintenance {
+  background-color: rgb(27, 86, 159);
+}
+
+.select-grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.create-button {
+  border-radius: 8px;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+}
+.report-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.status-badge.issue {
+  background-color: rgb(149, 4, 178);
+}
+
+.status-badge.incident {
+  background-color: rgb(220, 12, 12);
+}
+
+.close-button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 5px 1px #d6d5d5;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fffefe;
+  transition: border 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+.create-report {
+  position: fixed;
+  right: 20px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgb(96, 93, 93);
+  color: white;
+  cursor: pointer;
+}
+
+.details-form {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+}
+
+.form-section {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 10px;
+  border: 1px solid #e1e1e1;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.section-content {
+  margin-top: 15px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  min-width: 250px;
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+textarea {
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  height: 150px;
+  border: 1px solid #e1e1e1;
+  font-family: Arial, sans-serif;
+}
+
+.help-text {
+  font-size: 12px;
+  color: #888;
+}

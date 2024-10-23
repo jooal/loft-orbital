@@ -1,7 +1,7 @@
 import { useGetSatelliteDetailsQuery } from "@/generated/graphql";
-import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./SatelliteDetails.css";
+import { PayloadsTable } from "@/components/PayloadsTable/PayloadsTable";
 
 export const SatelliteDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,13 +16,12 @@ export const SatelliteDetails = () => {
 
   const satellite = data.allSatellites[0];
 
-  console.log(data);
   return (
     <div>
       {id ? (
         <span>
           <span
-            className="dashboard-link"
+            className="breadcrumb-link"
             onClick={() => {
               navigate("/");
             }}
@@ -84,18 +83,8 @@ export const SatelliteDetails = () => {
         </div>
 
         <div className="payloads-section">
-          <h2>Payloads</h2>
           {satellite?.Payloads && satellite?.Payloads.length > 0 ? (
-            <ul>
-              {satellite?.Payloads.map(payload => (
-                <li key={payload?.id}>
-                  <p>Name: {payload?.name}</p>
-                  <p>Description: {payload?.description}</p>
-                  <p>Status: {payload?.status}</p>
-                  <p>Category: {payload?.category}</p>
-                </li>
-              ))}
-            </ul>
+            <PayloadsTable data={satellite.Payloads} />
           ) : (
             <p>No payloads available.</p>
           )}

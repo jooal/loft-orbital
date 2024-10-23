@@ -1,5 +1,15 @@
-query GetSatellites {
-  allSatellites {
+query GetSatellites(
+  $page: Int
+  $perPage: Int
+  $sortField: String
+  $sortOrder: String # $filter: SatelliteFilter
+) {
+  allSatellites(
+    page: $page
+    perPage: $perPage
+    sortField: $sortField
+    sortOrder: $sortOrder # filter: $filter
+  ) {
     id
     name
     status
@@ -34,6 +44,67 @@ query GetSatelliteDetails($id: ID!) {
       outcome
       provider
       rocket
+    }
+  }
+}
+
+query GetAllReports {
+  allReports {
+    id
+    title
+    type
+    date
+    Satellite {
+      id
+      name
+    }
+    Comments {
+      id
+    }
+    GroundStation {
+      id
+      name
+    }
+  }
+}
+
+query GetReportDetails($id: ID!) {
+  allReports(filter: { id: $id }) {
+    id
+    title
+    type
+    date
+    satellite_id
+    employee_id
+    Satellite {
+      id
+      name
+    }
+    Comments {
+      id
+      date
+      content
+      employee_id
+      Employee {
+        name
+      }
+    }
+    Employee {
+      id
+      name
+    }
+    GroundStation {
+      id
+      name
+      coordinates
+      status
+      network
+      Contacts {
+        id
+        date
+        type
+        executionScript
+      }
     }
   }
 }

@@ -8,13 +8,15 @@ const config: CodegenConfig = {
     "apps/dashboard/src/generated/": {
       preset: "client",
       plugins: [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo",
+        { typescript: {} },
+        { "typescript-operations": {} },
+        { "typescript-react-apollo": {} },
       ],
       config: {
         withHooks: true,
         noDuplicateFragments: true,
+        avoidOptionals: true,
+        dedupeFragments: true,
       },
     },
     "./graphql.schema.json": {
