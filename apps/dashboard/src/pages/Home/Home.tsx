@@ -50,7 +50,17 @@ export const HomePage = () => {
   return (
     <div>
       {" "}
-      <span>Dashboard</span>
+      <>
+        <span>Satellites</span>
+        <button
+          className="create-report"
+          onClick={() => {
+            // setCreateFormOpen(true);
+          }}
+        >
+          Create Satellite +
+        </button>
+      </>
       <div className="table-container">
         <table className="table">
           <thead>

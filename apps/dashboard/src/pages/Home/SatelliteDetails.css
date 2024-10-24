@@ -33,7 +33,6 @@
 
 .card {
   border-radius: 12px;
-  width: 200px;
   height: 120px;
   box-shadow: 0 0 5px 2px #d6d5d5;
   padding: 12px;
@@ -94,7 +93,7 @@ label {
 
 .table-container {
   width: 100%;
-  margin: 20px 0;
+  margin: 36px 0;
   overflow-x: auto;
 }
 

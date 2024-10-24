@@ -26,19 +26,19 @@ export const SatelliteDetails = () => {
               navigate("/");
             }}
           >
-            Dashboard
+            Satellites
           </span>{" "}
-          / Satellite / {satellite?.name}
+          / {satellite?.name}
         </span>
       ) : (
-        <span>Dashboard</span>
+        <span>Satellites</span>
       )}
       <div className="satellite-details">
         <div className="header">
           <h2>{satellite?.name}</h2>
           <p>{satellite?.description}</p>
         </div>
-        <div className="grid-container">
+        <div>
           <div className="grid">
             <img
               src={satellite?.image}

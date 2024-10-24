@@ -1108,6 +1108,54 @@ export type SatelliteInput = {
   tle: Scalars["JSON"]["input"];
 };
 
+export type CreateReportMutationVariables = Exact<{
+  type: Scalars["String"]["input"];
+  date: Scalars["Date"]["input"];
+  title: Scalars["String"]["input"];
+  content: Scalars["String"]["input"];
+  satellite_id: InputMaybe<Scalars["ID"]["input"]>;
+  employee_id: Scalars["ID"]["input"];
+  groundStation_id: InputMaybe<Scalars["ID"]["input"]>;
+}>;
+
+export type CreateReportMutation = {
+  __typename?: "Mutation";
+  createReport: {
+    __typename?: "Report";
+    id: string;
+    title: string;
+    type: string;
+    date: any;
+    satellite_id: string | null;
+    employee_id: string;
+    Satellite: { __typename?: "Satellite"; id: string; name: string } | null;
+    Comments: Array<{
+      __typename?: "Comment";
+      id: string;
+      date: any;
+      content: string;
+      employee_id: string;
+      Employee: { __typename?: "Employee"; name: string } | null;
+    } | null> | null;
+    Employee: { __typename?: "Employee"; id: string; name: string } | null;
+    GroundStation: {
+      __typename?: "GroundStation";
+      id: string;
+      name: string;
+      coordinates: Array<number | null>;
+      status: string;
+      network: string;
+      Contacts: Array<{
+        __typename?: "Contact";
+        id: string;
+        date: any;
+        type: string;
+        executionScript: string;
+      } | null> | null;
+    } | null;
+  } | null;
+};
+
 export type GetSatellitesQueryVariables = Exact<{
   page: InputMaybe<Scalars["Int"]["input"]>;
   perPage: InputMaybe<Scalars["Int"]["input"]>;
@@ -1183,6 +1231,29 @@ export type GetAllReportsQuery = {
   } | null> | null;
 };
 
+export type GetCreateReportFormDataQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetCreateReportFormDataQuery = {
+  __typename?: "Query";
+  allGroundStations: Array<{
+    __typename?: "GroundStation";
+    id: string;
+    name: string;
+  } | null> | null;
+  allSatellites: Array<{
+    __typename?: "Satellite";
+    id: string;
+    name: string;
+  } | null> | null;
+  allEmployees: Array<{
+    __typename?: "Employee";
+    id: string;
+    name: string;
+  } | null> | null;
+};
+
 export type GetReportDetailsQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -1225,6 +1296,113 @@ export type GetReportDetailsQuery = {
   } | null> | null;
 };
 
+export const CreateReportDocument = gql`
+  mutation CreateReport(
+    $type: String!
+    $date: Date!
+    $title: String!
+    $content: String!
+    $satellite_id: ID
+    $employee_id: ID!
+    $groundStation_id: ID
+  ) {
+    createReport(
+      type: $type
+      date: $date
+      title: $title
+      content: $content
+      satellite_id: $satellite_id
+      employee_id: $employee_id
+      groundStation_id: $groundStation_id
+    ) {
+      id
+      title
+      type
+      date
+      satellite_id
+      employee_id
+      Satellite {
+        id
+        name
+      }
+      Comments {
+        id
+        date
+        content
+        employee_id
+        Employee {
+          name
+        }
+      }
+      Employee {
+        id
+        name
+      }
+      GroundStation {
+        id
+        name
+        coordinates
+        status
+        network
+        Contacts {
+          id
+          date
+          type
+          executionScript
+        }
+      }
+    }
+  }
+`;
+export type CreateReportMutationFn = Apollo.MutationFunction<
+  CreateReportMutation,
+  CreateReportMutationVariables
+>;
+
+/**
+ * __useCreateReportMutation__
+ *
+ * To run a mutation, you first call `useCreateReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportMutation, { data, loading, error }] = useCreateReportMutation({
+ *   variables: {
+ *      type: // value for 'type'
+ *      date: // value for 'date'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *      satellite_id: // value for 'satellite_id'
+ *      employee_id: // value for 'employee_id'
+ *      groundStation_id: // value for 'groundStation_id'
+ *   },
+ * });
+ */
+export function useCreateReportMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateReportMutation,
+    CreateReportMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateReportMutation,
+    CreateReportMutationVariables
+  >(CreateReportDocument, options);
+}
+export type CreateReportMutationHookResult = ReturnType<
+  typeof useCreateReportMutation
+>;
+export type CreateReportMutationResult =
+  Apollo.MutationResult<CreateReportMutation>;
+export type CreateReportMutationOptions = Apollo.BaseMutationOptions<
+  CreateReportMutation,
+  CreateReportMutationVariables
+>;
 export const GetSatellitesDocument = gql`
   query GetSatellites(
     $page: Int
@@ -1516,6 +1694,92 @@ export type GetAllReportsSuspenseQueryHookResult = ReturnType<
 export type GetAllReportsQueryResult = Apollo.QueryResult<
   GetAllReportsQuery,
   GetAllReportsQueryVariables
+>;
+export const GetCreateReportFormDataDocument = gql`
+  query GetCreateReportFormData {
+    allGroundStations(sortField: "name", sortOrder: "ASC") {
+      id
+      name
+    }
+    allSatellites(sortField: "name", sortOrder: "ASC") {
+      id
+      name
+    }
+    allEmployees(sortField: "name", sortOrder: "ASC") {
+      id
+      name
+    }
+  }
+`;
+
+/**
+ * __useGetCreateReportFormDataQuery__
+ *
+ * To run a query within a React component, call `useGetCreateReportFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateReportFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateReportFormDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCreateReportFormDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCreateReportFormDataQuery,
+    GetCreateReportFormDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCreateReportFormDataQuery,
+    GetCreateReportFormDataQueryVariables
+  >(GetCreateReportFormDataDocument, options);
+}
+export function useGetCreateReportFormDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCreateReportFormDataQuery,
+    GetCreateReportFormDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCreateReportFormDataQuery,
+    GetCreateReportFormDataQueryVariables
+  >(GetCreateReportFormDataDocument, options);
+}
+export function useGetCreateReportFormDataSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetCreateReportFormDataQuery,
+        GetCreateReportFormDataQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCreateReportFormDataQuery,
+    GetCreateReportFormDataQueryVariables
+  >(GetCreateReportFormDataDocument, options);
+}
+export type GetCreateReportFormDataQueryHookResult = ReturnType<
+  typeof useGetCreateReportFormDataQuery
+>;
+export type GetCreateReportFormDataLazyQueryHookResult = ReturnType<
+  typeof useGetCreateReportFormDataLazyQuery
+>;
+export type GetCreateReportFormDataSuspenseQueryHookResult = ReturnType<
+  typeof useGetCreateReportFormDataSuspenseQuery
+>;
+export type GetCreateReportFormDataQueryResult = Apollo.QueryResult<
+  GetCreateReportFormDataQuery,
+  GetCreateReportFormDataQueryVariables
 >;
 export const GetReportDetailsDocument = gql`
   query GetReportDetails($id: ID!) {

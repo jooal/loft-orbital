@@ -16,18 +16,20 @@ export const Reports = () => {
   return (
     <div>
       {createFormOpen ? (
-        <CreateReportForm setModalClose={setCreateFormOpen} />
+        <CreateReportForm setFormOpen={setCreateFormOpen} />
       ) : (
         <>
-          <span>Reports</span>
-          <button
-            className="create-report"
-            onClick={() => {
-              setCreateFormOpen(true);
-            }}
-          >
-            Create Report +
-          </button>
+          <div className="top-header">
+            <span>Reports</span>
+            <button
+              className="create-report"
+              onClick={() => {
+                setCreateFormOpen(true);
+              }}
+            >
+              Create Report +
+            </button>
+          </div>
           <div className="report-grid">
             {data.allReports.map(report => {
               const commentsLength = report?.Comments?.length ?? 0;
@@ -62,7 +64,7 @@ export const Reports = () => {
                     <p>{formattedDate}</p>
                   </div>
                   <span
-                    className={`status-badge ${report?.type?.toLowerCase()}`}
+                    className={`badge badge-${report?.type?.toLowerCase()}`}
                   >
                     {report?.type}
                   </span>

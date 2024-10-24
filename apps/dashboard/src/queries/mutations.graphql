@@ -1,0 +1,80 @@
+# interface ReportInput {
+#   type: String!
+#   date: Date!
+#   title: String!
+#   content: String!
+#   satelliteId: String!
+#   employeeId: String!
+#   groundStationId: String!
+# }
+
+# type CreateReportSuccess {
+#   report: Report!
+# }
+
+# type CreateReportFailure {
+#   _: Boolean
+# }
+
+# union CreateReportPayload = CreateReportSuccess | CreateReportFailure
+
+# type Mutation {
+#   createReport(input: CreateReportInput!): CreateReportPayload!
+# }
+
+mutation CreateReport(
+  $type: String!
+  $date: Date!
+  $title: String!
+  $content: String!
+  $satellite_id: ID
+  $employee_id: ID!
+  $groundStation_id: ID
+) {
+  createReport(
+    type: $type
+    date: $date
+    title: $title
+    content: $content
+    satellite_id: $satellite_id
+    employee_id: $employee_id
+    groundStation_id: $groundStation_id
+  ) {
+    id
+    title
+    type
+    date
+    satellite_id
+    employee_id
+    Satellite {
+      id
+      name
+    }
+    Comments {
+      id
+      date
+      content
+      employee_id
+      Employee {
+        name
+      }
+    }
+    Employee {
+      id
+      name
+    }
+    GroundStation {
+      id
+      name
+      coordinates
+      status
+      network
+      Contacts {
+        id
+        date
+        type
+        executionScript
+      }
+    }
+  }
+}

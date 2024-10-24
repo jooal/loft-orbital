@@ -10,7 +10,7 @@ export const SideNav = () => {
       </div>
       <ul className="menu">
         <li className="menu-item">
-          <Link to="/">Dashboard</Link>
+          <Link to="/">Satellites</Link>
         </li>
         <li className="menu-item">
           <Link to="/reports">Reports</Link>
@@ -26,7 +26,6 @@ export const SideNav = () => {
       <div className="sidenav-footer">
         <div className="help-center">Help Center</div>
         <div className="notifications">Notifications</div>
-        <div className="user-info">Ember Crest</div>
       </div>
     </nav>
   );

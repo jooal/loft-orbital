@@ -68,6 +68,21 @@ query GetAllReports {
   }
 }
 
+query GetCreateReportFormData {
+  allGroundStations(sortField: "name", sortOrder: "ASC") {
+    id
+    name
+  }
+  allSatellites(sortField: "name", sortOrder: "ASC") {
+    id
+    name
+  }
+  allEmployees(sortField: "name", sortOrder: "ASC") {
+    id
+    name
+  }
+}
+
 query GetReportDetails($id: ID!) {
   allReports(filter: { id: $id }) {
     id
