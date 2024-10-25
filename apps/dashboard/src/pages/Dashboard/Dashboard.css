@@ -1,0 +1,53 @@
+.dashboard-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-block-start: 2px;
+  gap: 8px;
+}
+
+.constellation-flex {
+  display: flex;
+  gap: 4px;
+}
+
+.map-container {
+  padding-block: 12px;
+  height: 60vh;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.pairing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-orbit {
+  background-color: #28a745;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-decommissioned {
+  background-color: #dc3545;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-planned {
+  background-color: #ffc107;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}

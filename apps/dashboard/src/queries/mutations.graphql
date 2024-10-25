@@ -78,3 +78,34 @@ mutation CreateReport(
     }
   }
 }
+
+mutation DeleteReport($id: ID!) {
+  removeReport(id: $id) {
+    id
+  }
+}
+
+mutation CreateComment(
+  $date: Date!
+  $content: String!
+  $employee_id: ID!
+  $report_id: ID!
+) {
+  createComment(
+    date: $date
+    content: $content
+    employee_id: $employee_id
+    report_id: $report_id
+  ) {
+    id
+    date
+    content
+    Report {
+      id
+    }
+    Employee {
+      id
+      name
+    }
+  }
+}

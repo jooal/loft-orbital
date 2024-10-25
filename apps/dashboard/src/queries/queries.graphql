@@ -2,13 +2,13 @@ query GetSatellites(
   $page: Int
   $perPage: Int
   $sortField: String
-  $sortOrder: String # $filter: SatelliteFilter
+  $sortOrder: String
 ) {
   allSatellites(
     page: $page
     perPage: $perPage
     sortField: $sortField
-    sortOrder: $sortOrder # filter: $filter
+    sortOrder: $sortOrder
   ) {
     id
     name
@@ -16,6 +16,51 @@ query GetSatellites(
     description
     Payloads {
       id
+    }
+  }
+}
+
+query GetFilteredSatellites(
+  $page: Int
+  $perPage: Int
+  $sortField: String
+  $sortOrder: String
+  $status: String
+) {
+  allSatellites(
+    page: $page
+    perPage: $perPage
+    sortField: $sortField
+    sortOrder: $sortOrder
+    filter: { status: $status }
+  ) {
+    id
+    name
+    status
+    description
+    Payloads {
+      id
+    }
+  }
+}
+
+input SatelliteFilter {
+  status: String
+}
+
+query DashboardData {
+  allSatellites {
+    id
+    name
+    status
+    coordinates
+  }
+  allConstellations {
+    id
+    name
+    Satellites {
+      id
+      name
     }
   }
 }
@@ -29,6 +74,8 @@ query GetSatelliteDetails($id: ID!) {
     description
     busType
     manufacturer
+    coordinates
+    altitude
     Payloads {
       id
       name
@@ -36,6 +83,10 @@ query GetSatelliteDetails($id: ID!) {
       status
       category
       configuration
+      Customer {
+        id
+        name
+      }
     }
     Launch {
       id
@@ -83,17 +134,26 @@ query GetCreateReportFormData {
   }
 }
 
+query GetAllEmployees {
+  allEmployees {
+    id
+  }
+}
+
 query GetReportDetails($id: ID!) {
   allReports(filter: { id: $id }) {
     id
     title
     type
     date
+    content
     satellite_id
     employee_id
     Satellite {
       id
       name
+      image
+      status
     }
     Comments {
       id

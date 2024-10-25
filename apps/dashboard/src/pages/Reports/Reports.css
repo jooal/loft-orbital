@@ -13,13 +13,20 @@
   cursor: pointer;
 }
 
+.report-comments {
+  margin-top: 12px;
+  border: 1px solid rgb(186, 186, 186);
+  border-radius: 12px;
+  padding: 20px;
+  height: 270px;
+}
+
+.empty-comments-container {
+  margin-top: 24px;
+}
+
 .top-header {
-  position: sticky;
-  top: 0;
   padding: 16px;
-  background-color: white;
-  z-index: 3;
-  /* box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2); */
 }
 
 .select-grid {
@@ -42,7 +49,9 @@
 }
 .report-grid {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 12px;
 }
 
 .close-button {
@@ -58,6 +67,12 @@
   top: 20px;
   cursor: pointer;
   box-shadow: 0 0 5px 1px #d6d5d5;
+}
+
+.padded-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 input[type="text"],
@@ -139,12 +154,49 @@ textarea {
   font-size: 12px;
   color: #888;
 }
+.report-details-card-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  margin-block-end: 12px;
+}
 
-.report-details-header {
-  margin-top: 24px;
+.column-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.column {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.comment-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgb(70, 68, 68);
+}
+.report-details-header {
+  margin-block: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-satellite-image {
+  width: 350px;
+  height: 250px;
+  border-radius: 16px;
+  border: 1px solid rgb(226, 224, 224);
+}
+
+.report-details-card {
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 0 5px 2px #d6d5d5;
 }
 
 .badge {
@@ -177,32 +229,22 @@ textarea {
   font-family: Arial, sans-serif;
 }
 
-.card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-}
-
-h2,
-h3,
-h4 {
-  color: #333;
-}
-
-.comment,
-.contact {
-  border-top: 1px solid #eee;
-  padding-top: 8px;
-  margin-top: 8px;
-}
-
-.comment p,
-.contact p {
-  margin: 0 0 8px;
-}
-
-.contacts-section,
 .comments-section {
-  margin-top: 16px;
+  display: grid;
+  gap: 4px;
+  margin-block-end: 12px;
+}
+
+.comments-container {
+  height: 130px;
+  margin-block-end: 12px;
+  overflow-y: auto;
+}
+
+.comment-textarea {
+  height: 60px;
+}
+
+.comment-content {
+  margin-inline-start: 12px;
 }

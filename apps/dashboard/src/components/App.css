@@ -10,6 +10,19 @@ body {
   height: 100vh;
 }
 
+button {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.loading {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
 .app {
   display: flex;
   height: 100vh;

@@ -1,17 +1,20 @@
-interface Payload {
-  id: string;
-  name: string;
-  description: string;
-  status: string;
-  category: string;
-}
+import { Payload } from "@/generated/graphql";
+
+// interface Payload {
+//   id: string;
+//   name: string;
+//   description: string;
+//   status: string;
+//   category: string;
+//   Customer: Customer;
+// }
 
 interface PayloadsTableProps {
   data: Payload[];
 }
 
 export const PayloadsTable = ({ data }: PayloadsTableProps) => {
-  const headers = ["Name", "Status", "Description", "Category"];
+  const headers = ["Name", "Status", "Description", "Category", "Customer"];
 
   return (
     <div>
@@ -32,6 +35,7 @@ export const PayloadsTable = ({ data }: PayloadsTableProps) => {
                 <td>{payload.status}</td>
                 <td>{payload.description}</td>
                 <td>{payload.category}</td>
+                <td>{payload.Customer?.name}</td>
               </tr>
             ))}
           </tbody>

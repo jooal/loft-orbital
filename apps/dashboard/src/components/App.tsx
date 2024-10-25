@@ -1,12 +1,13 @@
-import { HomePage } from "@/pages/Home/Home";
+import { Satellites } from "@/pages/Satellites/Satellites";
 import { SideNav } from "./SideNav/SideNav";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Reports } from "@/pages/Reports/Reports";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/ApolloClient";
-import { SatelliteDetails } from "@/pages/Home/SatelliteDetails";
+import { SatelliteDetails } from "@/pages/Satellites/SatelliteDetails";
 import { ReportDetails } from "@/pages/Reports/ReportDetails";
+import { Dashboard } from "@/pages/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
           <SideNav />
           <div className="main-content">
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/satellite/:id" element={<SatelliteDetails />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/satellites" element={<Satellites />} />
+              <Route path="/satellites/:id" element={<SatelliteDetails />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/reports/:id" element={<ReportDetails />} />
             </Routes>

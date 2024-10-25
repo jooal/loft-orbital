@@ -7,6 +7,7 @@ import { useState } from "react";
 
 interface CreateReportFormProps {
   setFormOpen: (arg: boolean) => void;
+  mode: "Edit" | "Create";
 }
 
 // enum IncidentType {}
@@ -19,13 +20,12 @@ const IncidentTypes = [
 
 export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
   const { data, loading, error } = useGetCreateReportFormDataQuery();
-  if (loading) return <div className="details-form">Loading form...</div>;
 
   const satellites = data?.allSatellites ?? [];
   const groundStations = data?.allGroundStations ?? [];
   const employees = data?.allEmployees ?? [];
-  console.log("data", data);
 
+  // Set some default values for dropdowns for form validation
   const [formValues, setFormValues] = useState({
     type: "Maintenance",
     title: "",
@@ -41,26 +41,25 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
     content: "",
   });
 
-  const [createReportMutation, { error: mutationError }] =
-    useCreateReportMutation({
-      onCompleted: () => {
-        setFormOpen(false);
-        setFormValues({
-          type: "Maintenance",
-          title: "",
-          date: new Date(),
-          content: "",
-          satelliteId: satellites[0]?.id ?? "",
-          employeeId: employees[0]?.id,
-          groundStationId: groundStations[0]?.id ?? "",
-        });
-      },
-      refetchQueries: "active",
-      onError: () => {
-        alert("Something went wrong. Try again.");
-      },
-    });
-  console.log(formValues);
+  const [createReportMutation] = useCreateReportMutation({
+    onCompleted: () => {
+      setFormOpen(false);
+      setFormValues({
+        type: "Maintenance",
+        title: "",
+        date: new Date(),
+        content: "",
+        satelliteId: satellites[0]?.id ?? "",
+        employeeId: employees[0]?.id,
+        groundStationId: groundStations[0]?.id ?? "",
+      });
+    },
+    refetchQueries: "active",
+    onError: e => {
+      console.error("Create report error", e);
+      alert("Something went wrong. Try again.");
+    },
+  });
 
   const handleSubmit = async () => {
     try {
@@ -76,23 +75,18 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
         },
       });
     } catch (e) {
-      console.error("error creating report", e);
+      console.error("Error submitting report", e);
     }
   };
 
-  if (
-    error ||
-    !data ||
-    !data.allSatellites ||
-    !data.allGroundStations ||
-    !data.allEmployees
-  ) {
-    return (
-      <div className="details-form">
-        Something went wrong or data is unavailable.
-      </div>
-    );
-  }
+  const disableSubmit =
+    !!formErrors.content ||
+    !!formErrors.title ||
+    !formValues.title.trim() ||
+    !formValues.content.trim();
+
+  if (loading) return <div className="loading">Loading form...</div>;
+  if (error) return <div className="loading">Something went wrong.</div>;
 
   return (
     <div className="details-form">
@@ -114,8 +108,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
         <div>
           <div className="section-content">
             <div className="form-group">
-              <label>Report Title</label>
+              <label htmlFor="reportTitle">Report Title</label>
               <input
+                id="reportTitle"
                 required
                 type="text"
                 placeholder="ex: Satellite Maintenance Report"
@@ -152,8 +147,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               </p>
             </div>
             <div className="form-group">
-              <label>Ground Station</label>
+              <label htmlFor="groundStation">Ground Station</label>
               <select
+                id="groundStation"
                 value={formValues.groundStationId}
                 onChange={e => {
                   const value = e.target.value;
@@ -168,8 +164,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               </select>
             </div>
             <div className="form-group">
-              <label>Employee</label>
+              <label htmlFor="employee">Employee</label>
               <select
+                id="employee"
                 value={formValues.employeeId}
                 onChange={e => {
                   const value = e.target.value;
@@ -184,8 +181,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               </select>
             </div>
             <div className="form-group">
-              <label>Report Details</label>
+              <label htmlFor="reportDetails">Report Details</label>
               <textarea
+                id="reportDetails"
                 onChange={e => {
                   const value = e.target.value.trim();
                   if (!value) {
@@ -216,8 +214,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
             </div>
             <div className="select-grid">
               <div className="form-group">
-                <label>Date of event</label>
+                <label htmlFor="date">Date of event</label>
                 <input
+                  id="date"
                   type="date"
                   className="date-picker"
                   value={formValues.date.toISOString().substring(0, 10)}
@@ -229,8 +228,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               </div>
 
               <div className="form-group">
-                <label>Incident Type</label>
+                <label htmlFor="type">Incident Type</label>
                 <select
+                  id="type"
                   value={formValues.type}
                   onChange={e => {
                     const value = e.target.value;
@@ -246,9 +246,10 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               </div>
 
               <div className="form-group">
-                <label>Satellite</label>
+                <label htmlFor="satellite">Satellite</label>
                 <div className="row">
                   <select
+                    id="satellite"
                     value={formValues.satelliteId}
                     onChange={e => {
                       const value = e.target.value;
@@ -266,7 +267,7 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               <button
                 className="form-create-button"
                 type="submit"
-                disabled={!!formErrors.content && !!formErrors.title}
+                disabled={disableSubmit}
               >
                 Create Report
               </button>

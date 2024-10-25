@@ -1,0 +1,16 @@
+.card-details {
+  text-align: left; /* Aligns text to the left */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns content to the start (left) */
+  justify-content: center;
+  margin-block-start: 12px;
+}
+
+.card-component {
+  border-radius: 12px;
+  height: auto;
+  width: auto;
+  box-shadow: 0 0 5px 0px #c8c8c8;
+  padding: 12px 16px;
+}

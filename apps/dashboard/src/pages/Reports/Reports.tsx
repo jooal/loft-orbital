@@ -3,6 +3,8 @@ import "./Reports.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateReportForm } from "./CreateNewReportForm";
+import { readableDate } from "@/utils";
+import { Card } from "@/components/Card/Card";
 
 export const Reports = () => {
   const { data, loading, error } = useGetAllReportsQuery();
@@ -11,6 +13,14 @@ export const Reports = () => {
 
   if (!data?.allReports) {
     return null;
+  }
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="loading">Error fetching data</div>;
   }
 
   return (
@@ -34,41 +44,34 @@ export const Reports = () => {
             {data.allReports.map(report => {
               const commentsLength = report?.Comments?.length ?? 0;
 
-              const date = new Date("2024-03-10T00:00:00.000Z");
-
-              const formattedDate = new Intl.DateTimeFormat("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }).format(date);
-
               return (
-                <div
-                  key={report?.id}
-                  className="report-card"
+                <Card
                   onClick={() => {
                     navigate(`/reports/${report?.id}`);
                   }}
-                >
-                  <p>{report?.title}</p>
-                  <div>
-                    <label>Satellite</label>
-                    <p>{report?.Satellite?.name ?? "Unknown"}</p>
-                  </div>
-                  <p>
-                    {commentsLength}{" "}
-                    {commentsLength === 1 ? "comment" : "comments"}
-                  </p>
-                  <div>
-                    <label>Date</label>
-                    <p>{formattedDate}</p>
-                  </div>
-                  <span
-                    className={`badge badge-${report?.type?.toLowerCase()}`}
-                  >
-                    {report?.type}
-                  </span>
-                </div>
+                  content={
+                    <div key={report?.id} className="padded-card">
+                      <p>{report?.title}</p>
+                      <div>
+                        <label>Satellite</label>
+                        <p>{report?.Satellite?.name ?? "Unknown"}</p>
+                      </div>
+                      <p>
+                        {commentsLength}{" "}
+                        {commentsLength === 1 ? "comment" : "comments"}
+                      </p>
+                      <div>
+                        <label>Date</label>
+                        <p>{readableDate(report?.date)}</p>
+                      </div>
+                      <span
+                        className={`badge badge-${report?.type?.toLowerCase()}`}
+                      >
+                        {report?.type}
+                      </span>
+                    </div>
+                  }
+                />
               );
             })}
           </div>

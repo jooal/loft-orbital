@@ -10,17 +10,19 @@ export const SideNav = () => {
       </div>
       <ul className="menu">
         <li className="menu-item">
-          <Link to="/">Satellites</Link>
+          <Link to="/">Dashboard</Link>
+        </li>
+        <li className="menu-item">
+          <Link to="/satellites">Satellites</Link>
         </li>
         <li className="menu-item">
           <Link to="/reports">Reports</Link>
         </li>
-
         <li className="menu-item">
-          <Link to="/companies">Companies</Link>
+          <Link to="/payloads">Payloads</Link>
         </li>
         <li className="menu-item">
-          <Link to="/people">People</Link>
+          <Link to="/customers">Customers</Link>
         </li>
       </ul>
       <div className="sidenav-footer">

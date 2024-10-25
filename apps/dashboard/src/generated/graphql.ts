@@ -1156,6 +1156,34 @@ export type CreateReportMutation = {
   } | null;
 };
 
+export type DeleteReportMutationVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type DeleteReportMutation = {
+  __typename?: "Mutation";
+  removeReport: { __typename?: "Report"; id: string } | null;
+};
+
+export type CreateCommentMutationVariables = Exact<{
+  date: Scalars["Date"]["input"];
+  content: Scalars["String"]["input"];
+  employee_id: Scalars["ID"]["input"];
+  report_id: Scalars["ID"]["input"];
+}>;
+
+export type CreateCommentMutation = {
+  __typename?: "Mutation";
+  createComment: {
+    __typename?: "Comment";
+    id: string;
+    date: any;
+    content: string;
+    Report: { __typename?: "Report"; id: string } | null;
+    Employee: { __typename?: "Employee"; id: string; name: string } | null;
+  } | null;
+};
+
 export type GetSatellitesQueryVariables = Exact<{
   page: InputMaybe<Scalars["Int"]["input"]>;
   perPage: InputMaybe<Scalars["Int"]["input"]>;
@@ -1175,6 +1203,49 @@ export type GetSatellitesQuery = {
   } | null> | null;
 };
 
+export type GetFilteredSatellitesQueryVariables = Exact<{
+  page: InputMaybe<Scalars["Int"]["input"]>;
+  perPage: InputMaybe<Scalars["Int"]["input"]>;
+  sortField: InputMaybe<Scalars["String"]["input"]>;
+  sortOrder: InputMaybe<Scalars["String"]["input"]>;
+  status: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type GetFilteredSatellitesQuery = {
+  __typename?: "Query";
+  allSatellites: Array<{
+    __typename?: "Satellite";
+    id: string;
+    name: string;
+    status: string;
+    description: string;
+    Payloads: Array<{ __typename?: "Payload"; id: string } | null> | null;
+  } | null> | null;
+};
+
+export type DashboardDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DashboardDataQuery = {
+  __typename?: "Query";
+  allSatellites: Array<{
+    __typename?: "Satellite";
+    id: string;
+    name: string;
+    status: string;
+    coordinates: Array<number | null>;
+  } | null> | null;
+  allConstellations: Array<{
+    __typename?: "Constellation";
+    id: string;
+    name: string;
+    Satellites: Array<{
+      __typename?: "Satellite";
+      id: string;
+      name: string;
+    } | null> | null;
+  } | null> | null;
+};
+
 export type GetSatelliteDetailsQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -1190,6 +1261,8 @@ export type GetSatelliteDetailsQuery = {
     description: string;
     busType: string;
     manufacturer: string;
+    coordinates: Array<number | null>;
+    altitude: number;
     Payloads: Array<{
       __typename?: "Payload";
       id: string;
@@ -1198,6 +1271,7 @@ export type GetSatelliteDetailsQuery = {
       status: string;
       category: string;
       configuration: any;
+      Customer: { __typename?: "Customer"; id: string; name: string } | null;
     } | null> | null;
     Launch: {
       __typename?: "Launch";
@@ -1254,6 +1328,13 @@ export type GetCreateReportFormDataQuery = {
   } | null> | null;
 };
 
+export type GetAllEmployeesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllEmployeesQuery = {
+  __typename?: "Query";
+  allEmployees: Array<{ __typename?: "Employee"; id: string } | null> | null;
+};
+
 export type GetReportDetailsQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -1266,9 +1347,16 @@ export type GetReportDetailsQuery = {
     title: string;
     type: string;
     date: any;
+    content: string;
     satellite_id: string | null;
     employee_id: string;
-    Satellite: { __typename?: "Satellite"; id: string; name: string } | null;
+    Satellite: {
+      __typename?: "Satellite";
+      id: string;
+      name: string;
+      image: string;
+      status: string;
+    } | null;
     Comments: Array<{
       __typename?: "Comment";
       id: string;
@@ -1403,6 +1491,128 @@ export type CreateReportMutationOptions = Apollo.BaseMutationOptions<
   CreateReportMutation,
   CreateReportMutationVariables
 >;
+export const DeleteReportDocument = gql`
+  mutation DeleteReport($id: ID!) {
+    removeReport(id: $id) {
+      id
+    }
+  }
+`;
+export type DeleteReportMutationFn = Apollo.MutationFunction<
+  DeleteReportMutation,
+  DeleteReportMutationVariables
+>;
+
+/**
+ * __useDeleteReportMutation__
+ *
+ * To run a mutation, you first call `useDeleteReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReportMutation, { data, loading, error }] = useDeleteReportMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteReportMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteReportMutation,
+    DeleteReportMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteReportMutation,
+    DeleteReportMutationVariables
+  >(DeleteReportDocument, options);
+}
+export type DeleteReportMutationHookResult = ReturnType<
+  typeof useDeleteReportMutation
+>;
+export type DeleteReportMutationResult =
+  Apollo.MutationResult<DeleteReportMutation>;
+export type DeleteReportMutationOptions = Apollo.BaseMutationOptions<
+  DeleteReportMutation,
+  DeleteReportMutationVariables
+>;
+export const CreateCommentDocument = gql`
+  mutation CreateComment(
+    $date: Date!
+    $content: String!
+    $employee_id: ID!
+    $report_id: ID!
+  ) {
+    createComment(
+      date: $date
+      content: $content
+      employee_id: $employee_id
+      report_id: $report_id
+    ) {
+      id
+      date
+      content
+      Report {
+        id
+      }
+      Employee {
+        id
+        name
+      }
+    }
+  }
+`;
+export type CreateCommentMutationFn = Apollo.MutationFunction<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      date: // value for 'date'
+ *      content: // value for 'content'
+ *      employee_id: // value for 'employee_id'
+ *      report_id: // value for 'report_id'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCommentMutation,
+    CreateCommentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCommentMutation,
+    CreateCommentMutationVariables
+  >(CreateCommentDocument, options);
+}
+export type CreateCommentMutationHookResult = ReturnType<
+  typeof useCreateCommentMutation
+>;
+export type CreateCommentMutationResult =
+  Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+>;
 export const GetSatellitesDocument = gql`
   query GetSatellites(
     $page: Int
@@ -1500,6 +1710,194 @@ export type GetSatellitesQueryResult = Apollo.QueryResult<
   GetSatellitesQuery,
   GetSatellitesQueryVariables
 >;
+export const GetFilteredSatellitesDocument = gql`
+  query GetFilteredSatellites(
+    $page: Int
+    $perPage: Int
+    $sortField: String
+    $sortOrder: String
+    $status: String
+  ) {
+    allSatellites(
+      page: $page
+      perPage: $perPage
+      sortField: $sortField
+      sortOrder: $sortOrder
+      filter: { status: $status }
+    ) {
+      id
+      name
+      status
+      description
+      Payloads {
+        id
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetFilteredSatellitesQuery__
+ *
+ * To run a query within a React component, call `useGetFilteredSatellitesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFilteredSatellitesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFilteredSatellitesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
+ *      sortField: // value for 'sortField'
+ *      sortOrder: // value for 'sortOrder'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useGetFilteredSatellitesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetFilteredSatellitesQuery,
+    GetFilteredSatellitesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFilteredSatellitesQuery,
+    GetFilteredSatellitesQueryVariables
+  >(GetFilteredSatellitesDocument, options);
+}
+export function useGetFilteredSatellitesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFilteredSatellitesQuery,
+    GetFilteredSatellitesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFilteredSatellitesQuery,
+    GetFilteredSatellitesQueryVariables
+  >(GetFilteredSatellitesDocument, options);
+}
+export function useGetFilteredSatellitesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetFilteredSatellitesQuery,
+        GetFilteredSatellitesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetFilteredSatellitesQuery,
+    GetFilteredSatellitesQueryVariables
+  >(GetFilteredSatellitesDocument, options);
+}
+export type GetFilteredSatellitesQueryHookResult = ReturnType<
+  typeof useGetFilteredSatellitesQuery
+>;
+export type GetFilteredSatellitesLazyQueryHookResult = ReturnType<
+  typeof useGetFilteredSatellitesLazyQuery
+>;
+export type GetFilteredSatellitesSuspenseQueryHookResult = ReturnType<
+  typeof useGetFilteredSatellitesSuspenseQuery
+>;
+export type GetFilteredSatellitesQueryResult = Apollo.QueryResult<
+  GetFilteredSatellitesQuery,
+  GetFilteredSatellitesQueryVariables
+>;
+export const DashboardDataDocument = gql`
+  query DashboardData {
+    allSatellites {
+      id
+      name
+      status
+      coordinates
+    }
+    allConstellations {
+      id
+      name
+      Satellites {
+        id
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useDashboardDataQuery__
+ *
+ * To run a query within a React component, call `useDashboardDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDashboardDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    DashboardDataQuery,
+    DashboardDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<DashboardDataQuery, DashboardDataQueryVariables>(
+    DashboardDataDocument,
+    options
+  );
+}
+export function useDashboardDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    DashboardDataQuery,
+    DashboardDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<DashboardDataQuery, DashboardDataQueryVariables>(
+    DashboardDataDocument,
+    options
+  );
+}
+export function useDashboardDataSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        DashboardDataQuery,
+        DashboardDataQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    DashboardDataQuery,
+    DashboardDataQueryVariables
+  >(DashboardDataDocument, options);
+}
+export type DashboardDataQueryHookResult = ReturnType<
+  typeof useDashboardDataQuery
+>;
+export type DashboardDataLazyQueryHookResult = ReturnType<
+  typeof useDashboardDataLazyQuery
+>;
+export type DashboardDataSuspenseQueryHookResult = ReturnType<
+  typeof useDashboardDataSuspenseQuery
+>;
+export type DashboardDataQueryResult = Apollo.QueryResult<
+  DashboardDataQuery,
+  DashboardDataQueryVariables
+>;
 export const GetSatelliteDetailsDocument = gql`
   query GetSatelliteDetails($id: ID!) {
     allSatellites(filter: { id: $id }) {
@@ -1510,6 +1908,8 @@ export const GetSatelliteDetailsDocument = gql`
       description
       busType
       manufacturer
+      coordinates
+      altitude
       Payloads {
         id
         name
@@ -1517,6 +1917,10 @@ export const GetSatelliteDetailsDocument = gql`
         status
         category
         configuration
+        Customer {
+          id
+          name
+        }
       }
       Launch {
         id
@@ -1781,6 +2185,83 @@ export type GetCreateReportFormDataQueryResult = Apollo.QueryResult<
   GetCreateReportFormDataQuery,
   GetCreateReportFormDataQueryVariables
 >;
+export const GetAllEmployeesDocument = gql`
+  query GetAllEmployees {
+    allEmployees {
+      id
+    }
+  }
+`;
+
+/**
+ * __useGetAllEmployeesQuery__
+ *
+ * To run a query within a React component, call `useGetAllEmployeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllEmployeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllEmployeesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllEmployeesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAllEmployeesQuery,
+    GetAllEmployeesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAllEmployeesQuery, GetAllEmployeesQueryVariables>(
+    GetAllEmployeesDocument,
+    options
+  );
+}
+export function useGetAllEmployeesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllEmployeesQuery,
+    GetAllEmployeesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAllEmployeesQuery,
+    GetAllEmployeesQueryVariables
+  >(GetAllEmployeesDocument, options);
+}
+export function useGetAllEmployeesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetAllEmployeesQuery,
+        GetAllEmployeesQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAllEmployeesQuery,
+    GetAllEmployeesQueryVariables
+  >(GetAllEmployeesDocument, options);
+}
+export type GetAllEmployeesQueryHookResult = ReturnType<
+  typeof useGetAllEmployeesQuery
+>;
+export type GetAllEmployeesLazyQueryHookResult = ReturnType<
+  typeof useGetAllEmployeesLazyQuery
+>;
+export type GetAllEmployeesSuspenseQueryHookResult = ReturnType<
+  typeof useGetAllEmployeesSuspenseQuery
+>;
+export type GetAllEmployeesQueryResult = Apollo.QueryResult<
+  GetAllEmployeesQuery,
+  GetAllEmployeesQueryVariables
+>;
 export const GetReportDetailsDocument = gql`
   query GetReportDetails($id: ID!) {
     allReports(filter: { id: $id }) {
@@ -1788,11 +2269,14 @@ export const GetReportDetailsDocument = gql`
       title
       type
       date
+      content
       satellite_id
       employee_id
       Satellite {
         id
         name
+        image
+        status
       }
       Comments {
         id
