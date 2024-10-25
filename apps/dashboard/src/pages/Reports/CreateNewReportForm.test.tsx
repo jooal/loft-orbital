@@ -4,6 +4,7 @@ import { CreateReportForm } from "./CreateNewReportForm";
 import {
   useCreateReportMutation,
   useGetCreateReportFormDataQuery,
+  useUpdateReportMutation,
 } from "@/generated/graphql";
 import { Mock } from "jest-mock";
 import "@testing-library/jest-dom";
@@ -12,6 +13,7 @@ import "@testing-library/jest-dom";
 vi.mock("@/generated/graphql", () => ({
   useGetCreateReportFormDataQuery: vi.fn(),
   useCreateReportMutation: vi.fn(),
+  useUpdateReportMutation: vi.fn(),
 }));
 
 describe("CreateReportForm", () => {
@@ -33,7 +35,7 @@ describe("CreateReportForm", () => {
 
     const setFormOpenMock = vi.fn();
 
-    render(<CreateReportForm setFormOpen={setFormOpenMock} />);
+    render(<CreateReportForm setFormOpen={setFormOpenMock} mode="Create" />);
     //check content
     expect(screen.getByLabelText("Report Title")).toBeInTheDocument();
     expect(screen.getByLabelText("Ground Station")).toBeInTheDocument();
@@ -89,7 +91,7 @@ describe("CreateReportForm", () => {
 
     const setFormOpenMock = vi.fn();
 
-    render(<CreateReportForm setFormOpen={setFormOpenMock} />);
+    render(<CreateReportForm setFormOpen={setFormOpenMock} mode="Create" />);
 
     const submitButton = screen.getByRole("button", { name: "Create Report" });
     expect(submitButton).toBeDisabled();
@@ -115,5 +117,65 @@ describe("CreateReportForm", () => {
     });
 
     expect(submitButton).toBeEnabled();
+  });
+
+  it("calls updateReportMutation", async () => {
+    (useGetCreateReportFormDataQuery as jest.Mock).mockReturnValue({
+      data: {
+        allSatellites: [{ id: "1", name: "Satellite 1" }],
+        allGroundStations: [{ id: "1", name: "Ground Station 1" }],
+        allEmployees: [{ id: "1", name: "Employee 1" }],
+      },
+      loading: false,
+      error: undefined,
+    });
+
+    const mockUpdateReport = vi.fn().mockResolvedValue({});
+    (useUpdateReportMutation as jest.Mock).mockReturnValue([mockUpdateReport]);
+
+    const setFormOpenMock = vi.fn();
+
+    const initialValues = {
+      id: "1",
+      title: "Test title",
+      type: "Incident",
+      date: new Date(),
+      content: "Test content",
+      satelliteId: "1",
+      employeeId: "1",
+      groundStationId: "1",
+    };
+
+    render(
+      <CreateReportForm
+        setFormOpen={setFormOpenMock}
+        mode="Edit"
+        initialValues={initialValues}
+      />
+    );
+
+    expect(screen.getByLabelText("Report Title")).toHaveValue("Test title");
+    expect(screen.getByLabelText("Report Details")).toHaveValue("Test content");
+
+    fireEvent.change(screen.getByLabelText("Report Title"), {
+      target: { value: "Updated title" },
+    });
+
+    fireEvent.submit(screen.getByRole("button", { name: "Update Report" }));
+
+    await waitFor(() => {
+      expect(mockUpdateReport).toHaveBeenCalledWith({
+        variables: {
+          id: "1",
+          title: "Updated title",
+          type: "Incident",
+          date: expect.any(Date),
+          content: "Test content",
+          satellite_id: "1",
+          employee_id: "1",
+          groundStation_id: "1",
+        },
+      });
+    });
   });
 });

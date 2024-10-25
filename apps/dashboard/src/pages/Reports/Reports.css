@@ -172,6 +172,42 @@ textarea {
   gap: 4px;
 }
 
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(105, 105, 105, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+
+.modal {
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: 24px;
+}
+
+.delete-button {
+  background-color: rgb(200, 26, 26);
+  color: white;
+}
+
 .comment-date {
   display: flex;
   justify-content: space-between;

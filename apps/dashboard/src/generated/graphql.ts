@@ -1108,6 +1108,55 @@ export type SatelliteInput = {
   tle: Scalars["JSON"]["input"];
 };
 
+export type UpdateReportMutationVariables = Exact<{
+  id: Scalars["ID"]["input"];
+  type: InputMaybe<Scalars["String"]["input"]>;
+  date: InputMaybe<Scalars["Date"]["input"]>;
+  title: InputMaybe<Scalars["String"]["input"]>;
+  content: InputMaybe<Scalars["String"]["input"]>;
+  satellite_id: InputMaybe<Scalars["ID"]["input"]>;
+  employee_id: InputMaybe<Scalars["ID"]["input"]>;
+  groundStation_id: InputMaybe<Scalars["ID"]["input"]>;
+}>;
+
+export type UpdateReportMutation = {
+  __typename?: "Mutation";
+  updateReport: {
+    __typename?: "Report";
+    id: string;
+    title: string;
+    type: string;
+    date: any;
+    satellite_id: string | null;
+    employee_id: string;
+    Satellite: { __typename?: "Satellite"; id: string; name: string } | null;
+    Comments: Array<{
+      __typename?: "Comment";
+      id: string;
+      date: any;
+      content: string;
+      employee_id: string;
+      Employee: { __typename?: "Employee"; name: string } | null;
+    } | null> | null;
+    Employee: { __typename?: "Employee"; id: string; name: string } | null;
+    GroundStation: {
+      __typename?: "GroundStation";
+      id: string;
+      name: string;
+      coordinates: Array<number | null>;
+      status: string;
+      network: string;
+      Contacts: Array<{
+        __typename?: "Contact";
+        id: string;
+        date: any;
+        type: string;
+        executionScript: string;
+      } | null> | null;
+    } | null;
+  } | null;
+};
+
 export type CreateReportMutationVariables = Exact<{
   type: Scalars["String"]["input"];
   date: Scalars["Date"]["input"];
@@ -1384,6 +1433,116 @@ export type GetReportDetailsQuery = {
   } | null> | null;
 };
 
+export const UpdateReportDocument = gql`
+  mutation UpdateReport(
+    $id: ID!
+    $type: String
+    $date: Date
+    $title: String
+    $content: String
+    $satellite_id: ID
+    $employee_id: ID
+    $groundStation_id: ID
+  ) {
+    updateReport(
+      id: $id
+      type: $type
+      date: $date
+      title: $title
+      content: $content
+      satellite_id: $satellite_id
+      employee_id: $employee_id
+      groundStation_id: $groundStation_id
+    ) {
+      id
+      title
+      type
+      date
+      satellite_id
+      employee_id
+      Satellite {
+        id
+        name
+      }
+      Comments {
+        id
+        date
+        content
+        employee_id
+        Employee {
+          name
+        }
+      }
+      Employee {
+        id
+        name
+      }
+      GroundStation {
+        id
+        name
+        coordinates
+        status
+        network
+        Contacts {
+          id
+          date
+          type
+          executionScript
+        }
+      }
+    }
+  }
+`;
+export type UpdateReportMutationFn = Apollo.MutationFunction<
+  UpdateReportMutation,
+  UpdateReportMutationVariables
+>;
+
+/**
+ * __useUpdateReportMutation__
+ *
+ * To run a mutation, you first call `useUpdateReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateReportMutation, { data, loading, error }] = useUpdateReportMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      type: // value for 'type'
+ *      date: // value for 'date'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *      satellite_id: // value for 'satellite_id'
+ *      employee_id: // value for 'employee_id'
+ *      groundStation_id: // value for 'groundStation_id'
+ *   },
+ * });
+ */
+export function useUpdateReportMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateReportMutation,
+    UpdateReportMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateReportMutation,
+    UpdateReportMutationVariables
+  >(UpdateReportDocument, options);
+}
+export type UpdateReportMutationHookResult = ReturnType<
+  typeof useUpdateReportMutation
+>;
+export type UpdateReportMutationResult =
+  Apollo.MutationResult<UpdateReportMutation>;
+export type UpdateReportMutationOptions = Apollo.BaseMutationOptions<
+  UpdateReportMutation,
+  UpdateReportMutationVariables
+>;
 export const CreateReportDocument = gql`
   mutation CreateReport(
     $type: String!

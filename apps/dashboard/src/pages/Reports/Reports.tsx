@@ -7,7 +7,9 @@ import { readableDate } from "@/utils";
 import { Card } from "@/components/Card/Card";
 
 export const Reports = () => {
-  const { data, loading, error } = useGetAllReportsQuery();
+  const { data, loading, error } = useGetAllReportsQuery({
+    nextFetchPolicy: "cache-first",
+  });
   const [createFormOpen, setCreateFormOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ export const Reports = () => {
   return (
     <div>
       {createFormOpen ? (
-        <CreateReportForm setFormOpen={setCreateFormOpen} />
+        <CreateReportForm setFormOpen={setCreateFormOpen} mode={"Create"} />
       ) : (
         <>
           <div className="top-header">

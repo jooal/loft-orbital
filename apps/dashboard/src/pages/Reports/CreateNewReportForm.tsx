@@ -1,13 +1,25 @@
 import {
   useCreateReportMutation,
   useGetCreateReportFormDataQuery,
-  useGetSatellitesQuery,
+  useUpdateReportMutation,
 } from "@/generated/graphql";
 import { useState } from "react";
+
+interface EditReportFormValues {
+  id: string;
+  title: string;
+  type: string;
+  date: Date;
+  content: string;
+  satelliteId: string | undefined;
+  employeeId: string;
+  groundStationId: string | undefined;
+}
 
 interface CreateReportFormProps {
   setFormOpen: (arg: boolean) => void;
   mode: "Edit" | "Create";
+  initialValues?: EditReportFormValues;
 }
 
 // enum IncidentType {}
@@ -18,27 +30,45 @@ const IncidentTypes = [
   { label: "Issue", value: "issue" },
 ];
 
-export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
+export const CreateReportForm = ({
+  setFormOpen,
+  mode,
+  initialValues,
+}: CreateReportFormProps) => {
   const { data, loading, error } = useGetCreateReportFormDataQuery();
+  const isEditMode = mode === "Edit";
 
   const satellites = data?.allSatellites ?? [];
   const groundStations = data?.allGroundStations ?? [];
-  const employees = data?.allEmployees ?? [];
+  const employees = (data && data.allEmployees) ?? [];
 
   // Set some default values for dropdowns for form validation
-  const [formValues, setFormValues] = useState({
-    type: "Maintenance",
-    title: "",
-    date: new Date(),
-    content: "",
-    satelliteId: satellites[0]?.id,
-    employeeId: employees[0]?.id,
-    groundStationId: groundStations[0]?.id ?? "",
-  });
+  const [formValues, setFormValues] = useState(
+    initialValues || {
+      type: "Maintenance",
+      title: "",
+      date: new Date(),
+      content: "",
+      satelliteId: satellites[0]?.id,
+      employeeId: employees[0]?.id ?? "",
+      groundStationId: groundStations[0]?.id,
+    }
+  );
 
   const [formErrors, setFormErrors] = useState({
     title: "",
     content: "",
+  });
+
+  const [updateReportMutation] = useUpdateReportMutation({
+    onCompleted: () => {
+      setFormOpen(false);
+    },
+    refetchQueries: "active",
+    onError: e => {
+      console.error("Error updating report");
+      alert("Something went wrong. Try again.");
+    },
   });
 
   const [createReportMutation] = useCreateReportMutation({
@@ -49,9 +79,9 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
         title: "",
         date: new Date(),
         content: "",
-        satelliteId: satellites[0]?.id ?? "",
-        employeeId: employees[0]?.id,
-        groundStationId: groundStations[0]?.id ?? "",
+        satelliteId: satellites[0]?.id,
+        employeeId: employees[0]?.id ?? "",
+        groundStationId: groundStations[0]?.id,
       });
     },
     refetchQueries: "active",
@@ -63,17 +93,32 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
 
   const handleSubmit = async () => {
     try {
-      await createReportMutation({
-        variables: {
-          title: formValues.title,
-          type: formValues.type,
-          date: new Date(formValues.date),
-          content: formValues.content,
-          satellite_id: formValues.satelliteId ?? "",
-          employee_id: formValues.employeeId ?? "",
-          groundStation_id: formValues.groundStationId,
-        },
-      });
+      if (isEditMode) {
+        await updateReportMutation({
+          variables: {
+            id: initialValues!.id,
+            title: formValues.title,
+            type: formValues.type,
+            date: new Date(formValues.date),
+            content: formValues.content,
+            satellite_id: formValues.satelliteId ?? "",
+            employee_id: formValues.employeeId,
+            groundStation_id: formValues.groundStationId ?? "",
+          },
+        });
+      } else {
+        await createReportMutation({
+          variables: {
+            title: formValues.title,
+            type: formValues.type,
+            date: new Date(formValues.date),
+            content: formValues.content,
+            satellite_id: formValues.satelliteId ?? "",
+            employee_id: formValues.employeeId ?? "",
+            groundStation_id: formValues.groundStationId ?? "",
+          },
+        });
+      }
     } catch (e) {
       console.error("Error submitting report", e);
     }
@@ -83,14 +128,14 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
     !!formErrors.content ||
     !!formErrors.title ||
     !formValues.title.trim() ||
-    !formValues.content.trim();
-
+    !formValues.content.trim() ||
+    JSON.stringify(initialValues) === JSON.stringify(formValues);
   if (loading) return <div className="loading">Loading form...</div>;
   if (error) return <div className="loading">Something went wrong.</div>;
 
   return (
     <div className="details-form">
-      <h3>Create a new report</h3>
+      <h3>{isEditMode ? "Edit report" : "Create a new report"}</h3>
       <button
         className="close-button"
         onClick={() => {
@@ -184,6 +229,7 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
               <label htmlFor="reportDetails">Report Details</label>
               <textarea
                 id="reportDetails"
+                value={formValues.content}
                 onChange={e => {
                   const value = e.target.value.trim();
                   if (!value) {
@@ -269,7 +315,7 @@ export const CreateReportForm = ({ setFormOpen }: CreateReportFormProps) => {
                 type="submit"
                 disabled={disableSubmit}
               >
-                Create Report
+                {isEditMode ? "Update Report" : "Create Report"}
               </button>
             </div>
           </div>

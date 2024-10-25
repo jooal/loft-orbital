@@ -22,6 +22,65 @@
 #   createReport(input: CreateReportInput!): CreateReportPayload!
 # }
 
+mutation UpdateReport(
+  $id: ID!
+  $type: String
+  $date: Date
+  $title: String
+  $content: String
+  $satellite_id: ID
+  $employee_id: ID
+  $groundStation_id: ID
+) {
+  updateReport(
+    id: $id
+    type: $type
+    date: $date
+    title: $title
+    content: $content
+    satellite_id: $satellite_id
+    employee_id: $employee_id
+    groundStation_id: $groundStation_id
+  ) {
+    id
+    title
+    type
+    date
+    satellite_id
+    employee_id
+    Satellite {
+      id
+      name
+    }
+    Comments {
+      id
+      date
+      content
+      employee_id
+      Employee {
+        name
+      }
+    }
+    Employee {
+      id
+      name
+    }
+    GroundStation {
+      id
+      name
+      coordinates
+      status
+      network
+      Contacts {
+        id
+        date
+        type
+        executionScript
+      }
+    }
+  }
+}
+
 mutation CreateReport(
   $type: String!
   $date: Date!
