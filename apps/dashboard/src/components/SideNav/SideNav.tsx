@@ -18,12 +18,6 @@ export const SideNav = () => {
         <li className="menu-item">
           <Link to="/reports">Reports</Link>
         </li>
-        <li className="menu-item">
-          <Link to="/payloads">Payloads</Link>
-        </li>
-        <li className="menu-item">
-          <Link to="/customers">Customers</Link>
-        </li>
       </ul>
       <div className="sidenav-footer">
         <div className="help-center">Help Center</div>

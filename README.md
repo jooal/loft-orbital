@@ -2,16 +2,21 @@
 
 A web application for space! **Update me!!!**
 
-Home page:
+Dashboard page:
 
-- displays satellites and their payloads to provider quick overview of data
+- displays overview of satellites, constellations, and active satellite locations
 
 Reports page:
 
-- create reports and comments
+- shows reports, report details, ability to create/edit/delete reports, leave comments on reports
 
-Constellations page:
--create and query constellations
+Satellites page:
+
+- view satellites and satellite details
+
+TO RUN:
+
+- install all packages with npm `npm install`
 
 ## Tech Stack
 

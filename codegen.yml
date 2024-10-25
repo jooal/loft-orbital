@@ -1,0 +1,18 @@
+overwrite: true
+schema: "http://localhost:3000/graphql"
+documents: "apps/dashboard/src/queries/**/*.graphql"
+generates:
+  apps/dashboard/src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      noDuplicateFragments: true
+      avoidOptionals: true
+      dedupeFragments: true
+
+  ./graphql.schema.json:
+    plugins:
+      - introspection
