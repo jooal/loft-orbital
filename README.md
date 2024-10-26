@@ -17,6 +17,7 @@ Satellites page:
 TO RUN:
 
 - install all packages with npm `npm install`
+- run `npx graphql-codegen` to generate graphql.ts
 
 ## Tech Stack
 
