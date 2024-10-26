@@ -66,7 +66,7 @@ export const CreateReportForm = ({
     },
     refetchQueries: "active",
     onError: e => {
-      console.error("Error updating report");
+      console.error("Error updating report", e);
       alert("Something went wrong. Try again.");
     },
   });

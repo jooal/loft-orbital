@@ -14,10 +14,12 @@
 
 I included at least one of each CRUD operation and filter/sort functions.
 
-Things I would do if I had more time:
+Things I would do if I had more time (had to cut off at 12 hours this week):
 
+- figure out how to fix failing test in CreateNewReportForm.test.tsx!! ahhhh!
 - consolidate css and create themes
 - better naming for components and classnames
+- better typing --> enums, unions, etc
 - create a modern, responsive design
 - use Formik for form management to handle form state, errors, edit/create mode
 - build out Satellites create/edit form and deletion
